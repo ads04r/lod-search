@@ -52,6 +52,7 @@ foreach($data2 as $row)
 
 $rankings = unserialize(file_get_contents('total.txt'));
 
+$founduris = array();
 foreach($data as $row)
 {
 	foreach($row['types'] as $type)
