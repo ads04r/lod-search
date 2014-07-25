@@ -3,7 +3,7 @@
 $f3=require('lib/base.php');
 
 $f3->config('config.ini');
-
+$f3->set('TEMP', '/tmp/');
 
 $f3->route('GET /',
 	function ($f3) {
@@ -88,7 +88,7 @@ $f3->route('GET /search/@term',
 			$gnames = array();
 			foreach($graphs as $graph)
 			{
-				@$gnames[] = "<a href='".str_replace('/latest', '', $graph)."'>".$datasets[$graph]."</a>";
+				@$gnames[] = "<a href='".str_replace('/latest', '', $graph)."'>".$datasets["" . $graph]."</a>";
 			}
 			echo implode(', ', $gnames);
 			echo "</small>";

@@ -1,0 +1,77 @@
+#!/usr/bin/php
+<?php
+
+include_once("/home/ash/tools/arc2/ARC2.php");
+include_once("/home/ash/tools/Graphite/Graphite.php");
+
+$dumps_path = "/home/ash/tools/Hedgehog/data";
+$data = array();
+
+$datasets = array();
+if($fp = opendir($dumps_path))
+{
+	while(false !== ($dataset = readdir($fp)))
+	{
+		if(strcmp(substr($dataset, 0, 1), ".") == 0)
+		{
+			continue;
+		}
+		$datasets[] = $dataset;
+	}
+}
+
+foreach($datasets as $dataset)
+{
+	$dumps = array();
+	if($fp = opendir($dumps_path . "/" . $dataset))
+	{
+		while(false !== ($dump = readdir($fp)))
+		{
+			if(preg_match("/([0-9]+)-([0-9]+)-([0-9]+)/", $dump) == 0)
+			{
+				continue;
+			}
+			$dumps[] = $dump;
+		}
+	}
+	rsort($dumps);
+	
+	if(count($dumps) == 0)
+	{
+		continue;
+	}
+
+	$dump = $dumps[0];
+	$prickle_file = $dumps_path . "/" . $dataset . "/" . $dump . "/hedgehog.prickle";
+	if(!(file_exists($prickle_file)))
+	{
+		continue;
+	}
+
+	$g = new Graphite();
+	$g->load($prickle_file);
+	foreach($g->allSubjects() as $res)
+	{
+		$item = array();
+		$item['uri'] = "" . $res;
+		$item['title'] = "" . $res->label();
+		if(strcmp($item['title'], "[NULL]") == 0)
+		{
+			continue;
+		}
+		if($res->has("rdfs:comment"))
+		{
+			$item['comment'] = "" . $res->get("rdfs:comment");
+		}
+		$types = array();
+		foreach($res->types() as $type)
+		{
+			$types[] = "" . $type;
+		}
+		$item['types'] = $types;
+		$item['dataset'] = "http://id.southampton.ac.uk/dataset/" . $dataset;
+		$data[] = $item;
+	}
+}
+
+print(json_encode($data));
