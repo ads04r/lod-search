@@ -1,6 +1,6 @@
 <?php
 error_reporting(E_ALL);
-require('sparqllib.php');
+//require('sparqllib.php');
 
 $data = json_decode(file_get_contents(dirname(dirname(__FILE__)) . "/data/prickles.json"), true);
 $data2 = json_decode(file_get_contents(dirname(dirname(__FILE__)) . "/data/datasets.json"), true);

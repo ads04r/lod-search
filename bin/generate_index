@@ -1,13 +1,14 @@
 #!/usr/bin/php
 <?php
 
-include_once("/home/ash/tools/arc2/ARC2.php");
-include_once("/home/ash/tools/Graphite/Graphite.php");
+include_once("/var/wwwsites/tools/arc2/ARC2.php");
+include_once("/var/wwwsites/tools/Graphite/Graphite.php");
 
-$dumps_path = "/home/ash/tools/Hedgehog/data";
+$dumps_path = "/export/data/dumps";
 $data = array();
 
 $datasets = array();
+$ignored = json_decode(file_get_contents("/var/wwwsites/southampton.ac.uk/data/search/data/ignore_datasets.json"), true);
 if($fp = opendir($dumps_path))
 {
 	while(false !== ($dataset = readdir($fp)))
@@ -22,6 +23,13 @@ if($fp = opendir($dumps_path))
 
 foreach($datasets as $dataset)
 {
+	if(in_array($dataset, $ignored))
+	{
+		continue;
+	}
+
+	error_log("" . $dataset);
+
 	$dumps = array();
 	if($fp = opendir($dumps_path . "/" . $dataset))
 	{

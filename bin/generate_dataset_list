@@ -1,10 +1,10 @@
 #!/usr/bin/php
 <?php
 
-include_once("/home/ash/tools/arc2/ARC2.php");
-include_once("/home/ash/tools/Graphite/Graphite.php");
+include_once("/var/wwwsites/tools/arc2/ARC2.php");
+include_once("/var/wwwsites/tools/Graphite/Graphite.php");
 
-$dumps_path = "/home/ash/tools/Hedgehog/data";
+$dumps_path = "/export/data/dumps";
 $data = array();
 
 $datasets = array();

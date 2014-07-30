@@ -45,13 +45,19 @@ $f3->route('GET /search',
 	}
 );
 
+$f3->route('GET /?q=@term',
+	function ($f3) {
+		$term = $f3->get('PARAMS.term');
+		$f3->reroute('/'.$term);
+	}
+);
 $f3->route('GET /search?q=@term',
 	function ($f3) {
 		$term = $f3->get('PARAMS.term');
-		$f3->reroute('/search/'.$term);
+		$f3->reroute('/'.$term);
 	}
 );
-$f3->route('GET /search/@term',
+$f3->route('GET /@term',
 	function ($f3) {
 		echo Template::instance()->render('header.html');
 
